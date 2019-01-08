@@ -14,11 +14,12 @@ class CreateContactsTable extends Migration
     public function up()
     {
         Schema::create('contacts', function (Blueprint $table) {
-            $table->increments('user_id');
-            $table->string('COD');
+            $table->increments('contact_id');
+            $table->integer('cod_us')->unsigned(); // P000 People
+            $table->integer('cod_co')->unsigned(); // | C000 Companies
             $table->integer('phone');
-          //  $table->foreign('user_id')->references('user_id')->on('users')->onDelete('cascade');
-          //  $table->foreign('user_id')->references('company_id')->on('companies')->onDelete('cascade');
+            $table->foreign('cod_us')->references('user_id')->on('users')->onDelete('cascade');
+            $table->foreign('cod_co')->references('company_id')->on('companies')->onDelete('cascade');
             $table->timestamps();
         });
     }
