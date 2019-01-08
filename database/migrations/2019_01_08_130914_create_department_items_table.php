@@ -14,7 +14,11 @@ class CreateDepartmentItemsTable extends Migration
     public function up()
     {
         Schema::create('department_items', function (Blueprint $table) {
-            $table->increments('id');
+            $table->increments('deit_id');
+            $table->integer('dep_id')->unsigned();
+            $table->integer('item_id')->unsigned();
+            $table->foreign('dep_id')->references('dep_id')->on('departments')->onDelete('cascade');
+            $table->foreign('item_id')->references('item_id')->on('items')->onDelete('cascade');
             $table->timestamps();
         });
     }

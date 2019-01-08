@@ -14,7 +14,11 @@ class CreateExtraItemsTable extends Migration
     public function up()
     {
         Schema::create('extra_items', function (Blueprint $table) {
-            $table->increments('id');
+            $table->increments('exit_id');
+            $table->integer('coex_id')->unsigned();
+            $table->integer('coit_id')->unsigned();
+            $table->foreign('coex_id')->references('coex_id')->on('company_extras')->onDelete('cascade');
+            $table->foreign('coit_id')->references('coit_id')->on('company_items')->onDelete('cascade');
             $table->timestamps();
         });
     }

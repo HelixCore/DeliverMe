@@ -15,8 +15,10 @@ class CreateContactsTable extends Migration
     {
         Schema::create('contacts', function (Blueprint $table) {
             $table->increments('user_id');
+            $table->string('COD');
             $table->integer('phone');
-            $table->foreign('user_id')->references('user_id')->on('users')->onDelete('cascade');
+          //  $table->foreign('user_id')->references('user_id')->on('users')->onDelete('cascade');
+          //  $table->foreign('user_id')->references('company_id')->on('companies')->onDelete('cascade');
             $table->timestamps();
         });
     }
