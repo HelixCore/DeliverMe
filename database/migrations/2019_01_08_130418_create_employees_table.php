@@ -14,8 +14,8 @@ class CreateEmployeesTable extends Migration
     public function up()
     {
         Schema::create('employees', function (Blueprint $table) {
-            $table->increments('emp_id');
-            $table->foreign('emp_id')->references('user_id')->on('users')->onDelete('cascade');
+            $table->increments('id');
+            $table->foreign('id')->references('id')->on('users')->onDelete('cascade');
             $table->timestamps();
         });
     }

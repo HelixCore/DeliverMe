@@ -14,11 +14,12 @@ class CreateCompanyExtrasTable extends Migration
     public function up()
     {
         Schema::create('company_extras', function (Blueprint $table) {
-            $table->increments('coex_id');
+            $table->increments('id');
             $table->integer('company_id')->unsigned();
             $table->integer('extra_id')->unsigned();
-            $table->foreign('company_id')->references('company_id')->on('companies')->onDelete('cascade');
-            $table->foreign('extra_id')->references('extra_id')->on('extras')->onDelete('cascade');
+            $table->float('price')->nullable();
+            $table->foreign('company_id')->references('id')->on('companies')->onDelete('cascade');
+            $table->foreign('extra_id')->references('id')->on('extras')->onDelete('cascade');
             $table->timestamps();
         });
     }

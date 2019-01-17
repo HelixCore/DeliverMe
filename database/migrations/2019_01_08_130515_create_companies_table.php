@@ -14,9 +14,10 @@ class CreateCompaniesTable extends Migration
     public function up()
     {
         Schema::create('companies', function (Blueprint $table) {
-            $table->increments('company_id');
-            $table->string('cod_co', 5)->unique();
+            $table->increments('id');
             $table->string('name', 30)->nullable()->default('text');
+            $table->integer('phone')->unsigned();
+         //   $table->foreign('phone')->references('phone')->on('contacts')->onDelete('cascade');
             $table->timestamps();
         });
     }

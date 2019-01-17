@@ -14,12 +14,8 @@ class CreateContactsTable extends Migration
     public function up()
     {
         Schema::create('contacts', function (Blueprint $table) {
-            $table->increments('contact_id');
-            $table->integer('cod_us')->unsigned(); // P000 People
-            $table->integer('cod_co')->unsigned(); // | C000 Companies
-            $table->integer('phone');
-            $table->foreign('cod_us')->references('user_id')->on('users')->onDelete('cascade');
-            $table->foreign('cod_co')->references('company_id')->on('companies')->onDelete('cascade');
+            $table->integer('phone')->unsigned();
+            $table->integer('number')->unsigned();
             $table->timestamps();
         });
     }
