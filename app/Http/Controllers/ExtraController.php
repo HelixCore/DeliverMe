@@ -1,7 +1,11 @@
 <?php
 namespace App\Http\Controllers;
-use Illuminate\Http\Request;
 use App\Extra;
+use App\company;
+use App\company_extra;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+
 class ExtraController extends Controller
 {
     /**
@@ -11,6 +15,9 @@ class ExtraController extends Controller
      */
     public function index()
     {
+        if (Auth::user()->id != 1) {
+            return redirect()->back()->withErrors(['Permission' => 'No tienes permis para esto']);
+        }
         $extras = Extra::latest()->paginate(5);
         return view('extra.index', compact('extras'))
                   ->with('i', (request()->input('page',1) -1)*5);
@@ -22,7 +29,12 @@ class ExtraController extends Controller
      */
     public function create()
     {
-        return view('extra.create');
+        if (Auth::user()->id != 1) {
+            return redirect()->back()->withErrors(['Permission' => 'No tienes permis para esto']);
+        }
+
+        $companies = company::all();
+        return view('extra.create')->with(['companies' => $companies]);
     }
     /**
      * Store a newly created resource in storage.
@@ -32,10 +44,23 @@ class ExtraController extends Controller
      */
     public function store(Request $request)
     {
+        if (Auth::user()->id != 1) {
+            return redirect()->back()->withErrors(['Permission' => 'No tienes permis para esto']);
+        }
         $request->validate([
           'name' => 'required',
+          'company' => 'required',
+          'price' => 'min:0|numeric|required'
         ]);
-        extra::create($request->all());
+     
+        $extra = extra::create($request->only('name'));
+
+        $company_extra = company_extra::create([
+            'company_id' => $request->input('company'),
+            'extra_id' => $extra->id,
+            'price' => $request->input('price')            
+        ]);
+
         return redirect()->route('extra.index')
                         ->with('success', 'Created successfully');
     }
@@ -47,6 +72,9 @@ class ExtraController extends Controller
      */
     public function show($id)
     {
+        if (Auth::user()->id != 1) {
+            return redirect()->back()->withErrors(['Permission' => 'No tienes permis para esto']);
+        }
         $extra = extra::find($id);
         return view('extra.detail', compact('extra'));
     }
@@ -58,6 +86,9 @@ class ExtraController extends Controller
      */
     public function edit($id)
     {
+        if (Auth::user()->id != 1) {
+            return redirect()->back()->withErrors(['Permission' => 'No tienes permis para esto']);
+        }
         $extra = Extra::find($id);
         return view('extra.edit', compact('extra'));
     }
@@ -70,6 +101,9 @@ class ExtraController extends Controller
      */
     public function update(Request $request, $id)
     {
+        if (Auth::user()->id != 1) {
+            return redirect()->back()->withErrors(['Permission' => 'No tienes permis para esto']);
+        }
       $request->validate([
         'name' => 'required',
       ]);
@@ -87,6 +121,9 @@ class ExtraController extends Controller
      */
     public function destroy($id)
     {
+        if (Auth::user()->id != 1) {
+            return redirect()->back()->withErrors(['Permission' => 'No tienes permis para esto']);
+        }
         $extra = extra::find($id);
         $extra->delete();
         return redirect()->route('extra.index')

@@ -3,7 +3,7 @@
   <div class="container">
     <div class="row">
       <div class="col-lg-12">
-        <h3>New Extra/h3>
+        <h3>Nuevo extra</h3>
       </div>
     </div>
 
@@ -26,9 +26,19 @@
           <input type="text" name="name" class="form-control" placeholder="Name">
         </div>
         <div class="col-md-12">
-          <strong>Description :</strong>
-          <textarea class="form-control" placeholder="des" name="des" rows="8" cols="80"></textarea>
+          <strong>Price :</strong>
+          <input type="number" name="price" class="form-control" placeholder="Price">
         </div>
+        <div class="form-check col-md-12">
+          <strong>Compañias</strong> @foreach ($companies as $company)
+          <div class="col-12">
+            <input class="form-check-input" type="radio" name="company" id="{{ $company->id }}" value="{{ $company->id }}">
+            <label class="form-check-label" for="{{ $company->id }}">{{ $company->name }}</label>
+          </div>
+          @endforeach
+        </div>
+
+
 
         <div class="col-md-12">
           <a href="{{route('extra.index')}}" class="btn btn-sm btn-success">Back</a>

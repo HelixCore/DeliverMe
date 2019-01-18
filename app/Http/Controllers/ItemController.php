@@ -1,7 +1,10 @@
 <?php
 namespace App\Http\Controllers;
-use Illuminate\Http\Request;
 use App\Item;
+use App\company;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+
 class ItemController extends Controller
 {
     /**
@@ -11,6 +14,10 @@ class ItemController extends Controller
      */
     public function index()
     {
+
+        if(Auth::user()->id !=1 ){
+            return back()->withErrors(['Permission' => 'No tienes permis para esto']);
+        }
         $items = Item::latest()->paginate(5);
         return view('item.index', compact('items'))
                   ->with('i', (request()->input('page',1) -1)*5);
@@ -22,7 +29,13 @@ class ItemController extends Controller
      */
     public function create()
     {
-        return view('item.create');
+        if (Auth::user()->id != 1) {
+            return redirect()->back()->withErrors(['Permission' => 'No tienes permis para esto']);
+        }
+
+        $extras = extra::all();
+        $companies = company::all();
+        return view('item.create')->with(['companies' => $companies, 'extras' => $extra]);
     }
     /**
      * Store a newly created resource in storage.
@@ -32,6 +45,10 @@ class ItemController extends Controller
      */
     public function store(Request $request)
     {
+        if (Auth::user()->id != 1) {
+            return redirect()->back()->withErrors(['Permission' => 'No tienes permis para esto']);
+        }
+
         $request->validate([
           'name' => 'required',
           'des' => 'required'
@@ -48,6 +65,9 @@ class ItemController extends Controller
      */
     public function show($id)
     {
+        if (Auth::user()->id != 1) {
+            return redirect()->back()->withErrors(['Permission' => 'No tienes permis para esto']);
+        }
         $item = Item::find($id);
         return view('item.detail', compact('item'));
     }
@@ -59,6 +79,9 @@ class ItemController extends Controller
      */
     public function edit($id)
     {
+        if (Auth::user()->id != 1) {
+            return redirect()->back()->withErrors(['Permission' => 'No tienes permis para esto']);
+        }
         $item = Item::find($id);
         return view('item.edit', compact('item'));
     }
@@ -71,16 +94,19 @@ class ItemController extends Controller
      */
     public function update(Request $request, $id)
     {
-      $request->validate([
-        'name' => 'required',
-        'des' => 'required'
-      ]);
-      $item = Item::find($id);
-      $item->name = $request->get('name');
-      $item->des = $request->get('des');
-      $item->save();
-      return redirect()->route('item.index')
-                      ->with('success', 'Updated successfully');
+        if (Auth::user()->id != 1) {
+            return redirect()->back()->withErrors(['Permission' => 'No tienes permis para esto']);
+        }
+        $request->validate([
+            'name' => 'required',
+            'des' => 'required'
+        ]);
+        $item = Item::find($id);
+        $item->name = $request->get('name');
+        $item->des = $request->get('des');
+        $item->save();
+        return redirect()->route('item.index')
+                        ->with('success', 'Updated successfully');
     }
     /**
      * Remove the specified resource from storage.
@@ -90,6 +116,9 @@ class ItemController extends Controller
      */
     public function destroy($id)
     {
+        if (Auth::user()->id != 1) {
+            return redirect()->back()->withErrors(['Permission' => 'No tienes permis para esto']);
+        }
         $item = Item::find($id);
         $item->delete();
         return redirect()->route('item.index')

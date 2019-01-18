@@ -59,6 +59,12 @@
                                     <a class="dropdown-item" href="{{ route('carrito') }}">
                                        Carrito
                                     </a>
+
+                                    @if (Auth::user()->id==1)
+                                        <a href="{{ route('item.index') }}" class="dropdown-item">Administrar productos</a>
+                                    @endif
+
+
                                     <a class="dropdown-item" href="{{ route('logout') }}"
                                        onclick="event.preventDefault();
                                                      document.getElementById('logout-form').submit();">
