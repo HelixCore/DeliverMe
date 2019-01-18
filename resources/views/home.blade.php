@@ -1,12 +1,13 @@
 @extends('layouts.app')
 
 @section('content')
-@if(session()->has('message'))
-<div class="alert alert-success">
-    {{ session()->get('message') }}
-</div>
-@endif
+
 <div class="container">
+    @if(session()->has('message'))
+    <div class="alert alert-success">
+        {{ session()->get('message') }}
+    </div>
+    @endif
     <div class="row">
         @forelse ($productos as $item)
         <div class="col-6" style="margin-bottom:5px">
