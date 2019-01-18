@@ -29,7 +29,10 @@
                 <strong>Description :</strong>
                 <textarea class="form-control" placeholder="des" name="des" rows="8" cols="80"></textarea>
             </div>
-            
+            <div class="col-md-12">
+                <strong>Price :</strong>
+                <input type="number" name="price" class="form-control" placeholder="Price">
+            </div>
             <div class="form-check col-md-12">
                 <strong>Compañias</strong>
                 @foreach ($companies as $company)
@@ -39,7 +42,15 @@
                     </div> 
                 @endforeach
             </div>
-
+            <div class="form-check col-md-12">
+                <strong>Extras</strong>
+                @foreach ($extras as $extra)
+                <div class="col-12">
+                    <input class="form-check-input" type="checkbox" name="extras[]" id="{{ $extra->id }}" value="{{ $extra->id }}">
+                    <label class="form-check-label" for="{{ $extra->id }}">{{ $extra->name }}</label>
+                </div>
+                @endforeach
+            </div>
 
             <div class="col-md-12">
                 <a href="{{route('item.index')}}" class="btn btn-sm btn-success">Back</a>

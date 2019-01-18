@@ -1,7 +1,11 @@
 <?php
 namespace App\Http\Controllers;
 use App\Item;
+use App\extra;
 use App\company;
+use App\extra_item;
+use App\company_item;
+use App\company_extra;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -35,7 +39,7 @@ class ItemController extends Controller
 
         $extras = extra::all();
         $companies = company::all();
-        return view('item.create')->with(['companies' => $companies, 'extras' => $extra]);
+        return view('item.create')->with(['companies' => $companies, 'extras' => $extras]);
     }
     /**
      * Store a newly created resource in storage.
@@ -50,10 +54,37 @@ class ItemController extends Controller
         }
 
         $request->validate([
-          'name' => 'required',
-          'des' => 'required'
+            'name' => 'required',
+            'des' => 'required',
+            'price' => 'min:0|numeric|required'
         ]);
-        Item::create($request->all());
+        $company_extra = [];
+        if ($request->has('extras')) {
+            
+
+            $company_extra = company_extra::where('company_id', '=', $request->input('company'))->whereIn('extra_id', $request->input('extras'))->get();
+            if (sizeof($company_extra)!=sizeof($request->input('extras'))) {
+                return back()->withErrors(['Problem' => 'Un extra no pertenece a la empresa']);;
+            }
+            
+        }
+        
+        $item = Item::create($request->all());
+
+        $company_item = company_item::create([
+            'company_id' => $request->input('company'),
+            'item_id' => $item->id,
+            'price' => $request->input('price')
+        ]);
+
+
+        foreach ($company_extra as $item) {
+            extra_item::create([
+                'coex_id' => $item->id,
+                'coit_id' => $company_item->id
+            ]);
+        }
+
         return redirect()->route('item.index')
                         ->with('success', 'Created successfully');
     }

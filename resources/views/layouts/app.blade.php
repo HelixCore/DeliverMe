@@ -62,6 +62,7 @@
 
                                     @if (Auth::user()->id==1)
                                         <a href="{{ route('item.index') }}" class="dropdown-item">Administrar productos</a>
+                                        <a href="{{ route('extra.index') }}" class="dropdown-item">Administrar extras</a>
                                     @endif
 
 
