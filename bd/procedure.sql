@@ -46,12 +46,22 @@ END;
 
 
 DROP PROCEDURE IF EXISTS pedido;
-CREATE PROCEDURE pedido (IN user INTEGER, )
+CREATE PROCEDURE pedido (IN user INTEGER)
 BEGIN   
     START TRANSACTION;
-	    insert into order (user,IdLibro,FechaPrestamo) values (lector, lib, CURDATE());
-        UPDATE libro
-        SET cantidad = (cantidad-1)
-        WHERE IdLibro = lib;
+	    insert into orders (user_id,emp_id,status,total,created_at) values (user,(select id from employees ORDER BY RAND() LIMIT 1),'A',0,CURDATE());
     COMMIT;
 END;
+
+DROP FUNCTION IF EXISTS getTotal;
+CREATE FUNCTION getTotal (IN id_order INTEGER)
+RETURNS FLOAT
+BEGIN   
+	return  
+END;
+
+CREATE FUNCTION totalPrestamos(libro int) 
+	RETURNS INT
+ 	BEGIN
+	return (SELECT SUM(idLibro) from prestamo where idLibro = libro GROUP BY idLibro);
+ 	END
