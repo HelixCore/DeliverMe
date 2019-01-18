@@ -16,7 +16,7 @@ class CreateOrdersTable extends Migration
         Schema::create('orders', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('user_id')->unsigned();
-            $table->integer('emp_id')->unsigned();
+            $table->integer('emp_id')->unsigned()->nullable();
           //  $table->date('deliver_date')->nullable()->default(new DateTime());
             $table->char('status', 4)->default('A');
             $table->float('total')->nullable()->default(123.45);

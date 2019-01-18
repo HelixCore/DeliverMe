@@ -1,23 +1,33 @@
 @extends('layouts.app')
 
 @section('content')
+@if(session()->has('message'))
+<div class="alert alert-success">
+    {{ session()->get('message') }}
+</div>
+@endif
 <div class="container">
-    <div class="row justify-content-center">
-        <div class="col-md-8">
+    <div class="row">
+        @forelse ($productos as $item)
+        <div class="col-6" style="margin-bottom:5px">
             <div class="card">
-                <div class="card-header">Dashboard</div>
-
                 <div class="card-body">
-                    @if (session('status'))
-                        <div class="alert alert-success" role="alert">
-                            {{ session('status') }}
-                        </div>
-                    @endif
-
-                    You are logged in!
+                    <strong>{{ $item->name }}</strong><br>
+                    <span>{{ $item->des }}</span><br>
+                    @auth
+                        <form action="{{ route('addCar') }}" method="post">
+                            @csrf
+                            <input type="hidden" value="{{ $item->id }}" name="item">
+                            <button class="btn btn-primary">Añadir al carrito</button>
+                        </form>
+                    @endauth
                 </div>
             </div>
         </div>
+        @empty 
+        
+        
+        @endforelse
     </div>
 </div>
 @endsection
