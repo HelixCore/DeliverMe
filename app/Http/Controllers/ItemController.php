@@ -1,10 +1,7 @@
 <?php
-
 namespace App\Http\Controllers;
-
-use App\item;
 use Illuminate\Http\Request;
-
+use App\Item;
 class ItemController extends Controller
 {
     /**
@@ -14,9 +11,10 @@ class ItemController extends Controller
      */
     public function index()
     {
-        //
+        $items = Item::latest()->paginate(5);
+        return view('item.index', compact('items'))
+                  ->with('i', (request()->input('page',1) -1)*5);
     }
-
     /**
      * Show the form for creating a new resource.
      *
@@ -24,9 +22,8 @@ class ItemController extends Controller
      */
     public function create()
     {
-        //
+        return view('item.create');
     }
-
     /**
      * Store a newly created resource in storage.
      *
@@ -35,51 +32,67 @@ class ItemController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+          'name' => 'required',
+          'des' => 'required'
+        ]);
+        Item::create($request->all());
+        return redirect()->route('item.index')
+                        ->with('success', 'Created successfully');
     }
-
     /**
      * Display the specified resource.
      *
-     * @param  \App\item  $item
+     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show(item $item)
+    public function show($id)
     {
-        //
+        $item = Item::find($id);
+        return view('item.detail', compact('item'));
     }
-
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\item  $item
+     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit(item $item)
+    public function edit($id)
     {
-        //
+        $item = Item::find($id);
+        return view('item.edit', compact('item'));
     }
-
     /**
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\item  $item
+     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, item $item)
+    public function update(Request $request, $id)
     {
-        //
+      $request->validate([
+        'name' => 'required',
+        'des' => 'required'
+      ]);
+      $item = Item::find($id);
+      $item->name = $request->get('name');
+      $item->des = $request->get('des');
+      $item->save();
+      return redirect()->route('item.index')
+                      ->with('success', 'Updated successfully');
     }
-
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\item  $item
+     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy(item $item)
+    public function destroy($id)
     {
-        //
+        $item = Item::find($id);
+        $item->delete();
+        return redirect()->route('item.index')
+                        ->with('success', 'Deleted successfully');
     }
 }
