@@ -12,6 +12,7 @@
                     <tr>
                         <th>Nombre</th>
                         <th>Descripcion</th>
+                        <th></th>
                     </tr>
                 </thead>
                 <tbody>
@@ -32,13 +33,19 @@
                         <tr><td>No posee productos en el carrito</td></tr>
                     @endforelse
                 </tbody>
+                <tfoot>
+                    <tr>
+                        <td colspan="3">
+                            Total de la orden es {{$order->getPrecio()}}
+                        </td>
+                    </tr>
+                </tfoot>
             </table>
             @if ($order)
                 <form action="{{ route('processOrder') }}" method="post">
                     @csrf
                     <input type="hidden" value="{{ $order->id }}" name="order_id">
                     <button class="btn btn-success">Ordenar</button>
-                    {{$order->getPrecio()}}
                 </form>
             @endif
         </div>

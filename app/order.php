@@ -2,6 +2,7 @@
 
 namespace App;
 
+use Illuminate\Support\Facades\DB;
 use Illuminate\Database\Eloquent\Model;
 
 class order extends Model
@@ -17,11 +18,11 @@ protected $table = 'orders';
         'user_id', 'emp_id', 'status', 'total'
     ];
 
-    public function getPrecio(Type $var = null)
+    public function getPrecio()
     {
         $price = DB::table('company_items')
                           ->join('carts' , 'carts.coit_id' , '=' , 'company_items.id')
-                          ->where ('order_id', $var)
+                          ->where ('order_id', $this->id)
                           ->sum('price'); 
         
         $extras = DB::table('company_extras')
@@ -29,12 +30,9 @@ protected $table = 'orders';
                           ->join('listextras'  , 'extra_items.id' , '=' , 'listextras.exit_id')
                           ->join('carts'       , 'listextras.cart_id' , '=' , 'carts.id')
                           ->join('orders'      , 'orders.id' , '=' , 'carts.order_id')
-                          ->where ('order_id', $var)
+                          ->where ('order_id', $this->id)
                           ->sum('price'); 
        $precioTotal = $price + $extras;
-       dd($precioTotal);
        return $precioTotal;
     }
 }
-
-$orden = order::where('user_id', '=', Auth::user()->id)->where('status', '=', '0')->get();
