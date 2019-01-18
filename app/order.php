@@ -32,6 +32,8 @@ protected $table = 'orders';
                           ->where ('order_id', $var)
                           ->sum('price'); 
        $precioTotal = $price + $extras;
+       dd($precioTotal);
+       return $precioTotal;
     }
 }
 

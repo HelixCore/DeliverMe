@@ -38,6 +38,7 @@
                     @csrf
                     <input type="hidden" value="{{ $order->id }}" name="order_id">
                     <button class="btn btn-success">Ordenar</button>
+                    {{$order->getPrecio()}}
                 </form>
             @endif
         </div>

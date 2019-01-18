@@ -33,3 +33,4 @@ class CreateExtraItemsTable extends Migration
         Schema::dropIfExists('extra_items');
     }
 }
+
