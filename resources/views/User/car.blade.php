@@ -19,6 +19,14 @@
                         <tr>
                             <td>{{ $item->name }}</td>
                             <td>{{ $item->des }}</td>
+                            <td>
+                            <form action="{{ route('extract') }}" method="post">
+                                @csrf
+                                <input type="hidden" value="{{ $order->id }}" name="order">
+                                <input type="hidden" value="{{ $item->id }}" name="product">
+                                <button class="btn btn-danger">Borrar</button>
+                            </form>
+                            </td>
                         </tr>
                     @empty
                         <tr><td>No posee productos en el carrito</td></tr>

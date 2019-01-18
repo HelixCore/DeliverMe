@@ -23,4 +23,5 @@ Route::group(['middleware' => ['auth']], function () {
     Route::post('addCard', 'HomeController@addCar')->name('addCar');
     Route::get('wachCar', 'CartController@index')->name('carrito');
     Route::post('processOrder', 'OrderController@process')->name('processOrder');
+    Route::post('extract', 'CartController@extract' )->name('extract');
 });

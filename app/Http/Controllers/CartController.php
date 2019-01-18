@@ -6,6 +6,7 @@ use App\cart;
 use App\item;
 use App\order;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 
 class CartController extends Controller
@@ -26,9 +27,6 @@ class CartController extends Controller
             });
         }
         return view('User.car', ['order' => $order, 'products' => $products]);
-
-
-
     }
 
     /**
@@ -95,5 +93,13 @@ class CartController extends Controller
     public function destroy(cart $cart)
     {
         //
+    }
+
+    public function extract(Request $request)
+    {
+        $coit_id = DB::table('company_items')->where('item_id', '=', $request->input('product'))->first()->id; 
+        $cart = cart::where('order_id', '=', $request->input('order'))->where('coit_id', '=',$coit_id);
+        $cart->delete();
+        return back();
     }
 }
