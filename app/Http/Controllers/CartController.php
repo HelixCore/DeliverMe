@@ -3,7 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\cart;
+use App\item;
+use App\order;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class CartController extends Controller
 {
@@ -14,7 +17,18 @@ class CartController extends Controller
      */
     public function index()
     {
-        //
+        
+        $order = order::where('user_id', '=', Auth::user()->id)->where('status', '=', '0')->first();
+        $products= [];
+        if($order){
+            $products = cart::where('order_id', '=', $order->id)->get()->map(function ($item) {
+                return item::find($item->coit_id);
+            });
+        }
+        return view('User.car', ['order' => $order, 'products' => $products]);
+
+
+
     }
 
     /**

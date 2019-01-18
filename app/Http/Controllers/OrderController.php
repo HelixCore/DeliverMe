@@ -82,4 +82,12 @@ class OrderController extends Controller
     {
         //
     }
+
+    public function process(Request $request)
+    {
+        $order = order::find($request->input('order_id'));
+        $order->status = 1;
+        $order->save();
+        return redirect('/');
+    }
 }
